@@ -1,3 +1,5 @@
+#include <u.h>
+#include "task.h"
 #include "taskimpl.h"
 
 /*
@@ -7,12 +9,12 @@ void
 tasksleep(Rendez *r)
 {
 	addtask(&r->waiting, taskrunning);
-	if(r->l)
-		qunlock(r->l);
-	taskstate("sleep");
+//	if(r->l)
+//		qunlock(r->l);
+//	taskstate("sleep");
 	taskswitch();
-	if(r->l)
-		qlock(r->l);
+//	if(r->l)
+//		qlock(r->l);
 }
 
 static int

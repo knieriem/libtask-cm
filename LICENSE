@@ -1,0 +1,74 @@
+This software is derived from Russ Cox' libtask, parts of Scott Nelson's cmcm,
+and small parts translated from TinyGo.
+
+
+## Changes and additions
+
+MIT License
+
+Copyright (c) 2022 Michael Teichgräber
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+
+## libtask
+
+See COPYRIGHT.libtask for license information.
+
+Affected files: task.c, rendez.c, task.h, taskimpl.h
+Source: https://swtch.com/libtask/
+
+
+## TinyGo
+
+See LICENSE.tinygo for details.
+
+Affected functions:
+	task.c:/^addsleeptask/ and
+	parts of task.c:/^taskswitch/
+
+Source: https://github.com/tinygo-org/tinygo/blob/3883550c446fc8b14115366284316290f3d3c4b1/src/runtime/scheduler.go#L79-L135
+
+
+## cmcm
+
+Affected file: task_cm.c, containing modified parts of
+	https://github.com/scttnlsn/cmcm/blob/f9ac934f22d76a60a89c16ef6dfbf567f9401113/cmcm.c
+
+MIT License
+
+Copyright (c) 2017 Scott Nelson
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
