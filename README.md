@@ -9,7 +9,7 @@ From the original README:
 Parts of another coroutine library, [cmcm], have been added for Cortex-M support,
 extended for being used with controllers containing a floating point unit.
 To reduce the number of context switches when tasks are sleeping,
-[parts] of TinyGo's scheduler] - translated to C - have been integrated.
+[parts of TinyGo's scheduler] - translated to C - have been integrated.
 
 [libtask]: https://swtch.com/libtask/
 [cmcm]: https://github.com/scttnlsn/cmcm
