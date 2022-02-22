@@ -25,6 +25,7 @@ alignptr(void *p, int *sz)
 	p0 = (uintptr)p;
 	pa = (p0 + 7) & ~(uintptr)7;
 	*sz -= pa-p0;
+	*sz &= ~7;
 	return (void*)pa;
 }
 
