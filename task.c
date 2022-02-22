@@ -85,6 +85,12 @@ taskyield(void)
 	return tasknswitch - n - 1;
 }
 
+int
+anyready(void)
+{
+	return taskrunqueue.head != nil;
+}
+
 void
 taskexit(int val)
 {
