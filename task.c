@@ -29,15 +29,20 @@ alignptr(void *p, int *sz)
 	return (void*)pa;
 }
 
-static int
-setuptask(Task *t, void (*fn)(void*), void *arg, void *stk, int stksize)
+static Task*
+setuptask(void (*fn)(void*), void *arg, void *stk, int stksize)
 {
+	Task *t;
+
 	if (stk == nil) {
-		return -1;
+		return nil;
 	}
 	stk = alignptr(stk, &stksize);
+	stksize -= sizeof *t;
+	stksize &= ~7;
+	t = (Task*)&((uchar*)stk)[stksize];
 	if (stksize <= 0) {
-		return -1;
+		return nil;
 	}
 
 	t->stk = stk;
@@ -51,15 +56,17 @@ setuptask(Task *t, void (*fn)(void*), void *arg, void *stk, int stksize)
 	/* setup stack with initial context */
 	taskcm_setuptask(t, fn, arg);
 
-	return 0;
+	return t;
 }
 
 int
-taskcreate(Task *t, void (*fn)(void*), void *arg, void *stk, uint stksize)
+taskcreate(void (*fn)(void*), void *arg, void *stk, uint stksize)
 {
+	Task *t;
 	int id;
 
-	if (setuptask(t, fn, arg, stk, stksize) == -1) {
+	t = setuptask(fn, arg, stk, stksize);
+	if (t == nil) {
 		return -1;
 	}
 	taskcount++;

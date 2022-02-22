@@ -30,9 +30,6 @@ Differences from the original libtask:
 	In the main context, still using the MSP stack, initial tasks can be created,
 	and the first task can be scheduled using `taskswitch()`.
 
--	The `Task` structure is exposed to the application,
-	to make debugging / monitoring easier.
-
 -	No dynamic memory allocation.  
 	`taskcreate`'s signature has been adjusted, by adding two arguments,
 	`Task*` and `void *stack`.
@@ -54,7 +51,7 @@ Differences from the original libtask:
 
 ## Basic task manipulation
 
-int taskcreate(Task*, void (*f)(void *arg), void *arg, void *stack, unsigned int stacksize);
+int taskcreate(void (*f)(void *arg), void *arg, void *stack, unsigned int stacksize);
 
 >	Create a new task running `f(arg)` on a stack of size stacksize.
 

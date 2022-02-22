@@ -32,7 +32,7 @@ typedef struct Task Task;
 typedef struct Tasklist Tasklist;
 
 int		anyready(void);
-int		taskcreate(Task*, void (*f)(void *arg), void *arg, void *stk, uint stacksize);
+int		taskcreate(void (*f)(void *arg), void *arg, void *stk, uint stacksize);
 void		taskexit(int);
 int		taskyield(void);
 void		taskswitch(void);
@@ -43,22 +43,6 @@ void	taskdelay(int32);
 unsigned int	taskid(void);
 
 int	taskstkusage(Task *t, int *free);
-
-struct Task
-{
-	Task	*next;
-	Task	*prev;
-	Task	*allnext;
-	Task	*allprev;
-	uint	id;
-	void *sp;
-	uchar	*stk;
-	uint	stksize;
-	int	exiting;
-	int	ready;
-	void	*udata;
-	int32	delay;
-};
 
 struct Tasklist	/* used internally */
 {

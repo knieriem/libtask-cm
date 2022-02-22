@@ -1,3 +1,19 @@
+struct Task
+{
+	Task	*next;
+	Task	*prev;
+	Task	*allnext;
+	Task	*allprev;
+	uint	id;
+	void *sp;
+	uchar	*stk;
+	uint	stksize;
+	int	exiting;
+	int	ready;
+	void	*udata;
+	int32	delay;
+};
+
 void	taskready(Task*);
 void	taskswitch(void);
 
