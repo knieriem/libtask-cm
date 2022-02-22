@@ -42,8 +42,6 @@ void		taskstate(char*, ...);
 void	taskdelay(int32);
 unsigned int	taskid(void);
 
-int	taskstkusage(Task *t, int *free);
-
 struct Tasklist	/* used internally */
 {
 	Task	*head;
