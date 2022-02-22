@@ -17,39 +17,6 @@ Tasklist	taskrunqueue;
 
 static int taskidgen;
 
-static int
-stkusage(Task *t, int *free)
-{
-	long	*p, *stk;
-
-	stk = (long*)t->stk;
-	for (p=stk; p < (long*)t->sp && *p == 0x55AA55AA; p++)
-		;
-	if (free!=nil) {
-		*free = (p-stk) * sizeof(long);
-	}
-	return (stk+t->stksize/sizeof(long) - p) * sizeof(long);
-}
-int
-taskstkusage(Task *t, int *free)
-{
-	return stkusage(taskrunning, free);
-}
-static void
-markmem(uchar *stk, int stksize)
-{
-	long	*p;
-
-	p = (long*)stk;
-
-	/* put a pattern to each data ram cell so that
-	 * later the maximum stack usage can be determined
-	 */
-	for (p=((long*)stk)+stksize/4-16; p>=(long*)stk; p--) {
-		*p = 0x55AA55AA;
-	}
-}
-
 static void*
 alignptr(void *p, int *sz)
 {
@@ -76,7 +43,9 @@ setuptask(Task *t, void (*fn)(void*), void *arg, void *stk, int stksize)
 	t->stksize = stksize;
 	t->id = ++taskidgen;
 
-	markmem(t->stk, t->stksize);
+	if (taskconf->memfill != nil) {
+		(*taskconf->memfill)(stk, stksize);
+	}
 
 	/* setup stack with initial context */
 	taskcm_setuptask(t, fn, arg);

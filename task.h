@@ -17,6 +17,9 @@ struct Taskconf {
 	int32 (*usec)(void);
 	int32 usec_uncertainty;
 	void	(*pauseusecs)(int32);
+
+	/* Memfill: fill memory with a pattern */
+	void (*memfill)(uint32 *p, int size);
 };
 extern	Taskconf	*taskconf;
 
