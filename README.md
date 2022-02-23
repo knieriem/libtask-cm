@@ -31,8 +31,7 @@ Differences from the original libtask:
 	and the first task can be scheduled using `taskswitch()`.
 
 -	No dynamic memory allocation.  
-	`taskcreate`'s signature has been adjusted, by adding two arguments,
-	`Task*` and `void *stack`.
+	`taskcreate`'s signature has been adjusted, by adding a `*stack` argument.
 
 -	There is no scheduler task; instead, next task is always determined during
 	`taskyield()`, reducing the number of context switches
