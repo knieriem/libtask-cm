@@ -17,15 +17,30 @@ Tasklist	taskrunqueue;
 
 static int taskidgen;
 
+/* alignptr adjusts the memory region defined by the provided pointer and size
+ * to 8-byte boundaries; it returns the adjusted pointer, and updates the
+ * size argument. The number of bytes the pointer was adjusted is returned in na0.
+ */
 static void*
-alignptr(void *p, int *sz)
+alignptr(void *p, int *sz, int *na0)
 {
 	uintptr p0, pa;
+	int n;
 
+	/* align p */
 	p0 = (uintptr)p;
 	pa = (p0 + 7) & ~(uintptr)7;
-	*sz -= pa-p0;
+	n = pa-p0;
+	if (n > *sz) {
+		*sz = 0;
+	} else {
+		*sz -= n;
+	}
+	*na0 = n;
+
+	/* align size */
 	*sz &= ~7;
+
 	return (void*)pa;
 }
 
@@ -33,11 +48,19 @@ static Task*
 setuptask(void (*fn)(void*), void *arg, void *stk, int stksize)
 {
 	Task *t;
+	void *origstk;
+	int na0;
 
 	if (stk == nil) {
 		return nil;
 	}
-	stk = alignptr(stk, &stksize);
+	origstk = stk;
+	stk = alignptr(stk, &stksize, &na0);
+	if (stk == nil || stksize == 0) {
+		return nil;
+	}
+
+	/* allocate a Task struct from the end of the aligned stack */
 	stksize -= sizeof *t;
 	stksize &= ~7;
 	t = (Task*)&((uchar*)stk)[stksize];
@@ -50,7 +73,7 @@ setuptask(void (*fn)(void*), void *arg, void *stk, int stksize)
 	t->id = ++taskidgen;
 
 	if (taskconf->memfill != nil) {
-		(*taskconf->memfill)(stk, stksize);
+		(*taskconf->memfill)(origstk, na0 + stksize);
 	}
 
 	/* setup stack with initial context */
