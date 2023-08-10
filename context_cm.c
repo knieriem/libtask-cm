@@ -65,8 +65,8 @@ taskcm_setuptask(Task *t, void (*handler)(void*), void* arg)
 	f->hw_frame.psr = 0x21000000;	/* default PSR value */
 }
 
-static	void **spfr;	/* nil on first switch from MSP to PSP */
-static	void *spto;
+static	uchar **spfr;	/* nil on first switch from MSP to PSP */
+static	uchar *spto;
 void
 taskcm_handlependsv(void)
 {

@@ -5,7 +5,7 @@ struct Task
 	Task	*allnext;
 	Task	*allprev;
 	uint	id;
-	void *sp;
+	uchar	*sp;
 	uchar	*stk;
 	uint	stksize;
 	int	exiting;
