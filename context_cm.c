@@ -147,8 +147,6 @@ taskcm_contextswitch(Task *from, Task *to)
 	/* manually trigger pend_sv */
 	ICSR |= (1 << 28);
 
-	__asm__("nop");
-	__asm__("nop");
-	__asm__("nop");
-	__asm__("nop");
+	/* ensure write is complete and pipeline is flushed */
+	__asm__ volatile ("dsb\n\tisb\n" : : : "memory");
 }
