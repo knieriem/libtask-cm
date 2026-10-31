@@ -65,83 +65,16 @@ taskcm_setuptask(Task *t, void (*handler)(void*), void* arg)
 	f->hw_frame.psr = 0x21000000;	/* default PSR value */
 }
 
-static	uchar **spfr;	/* nil on first switch from MSP to PSP */
-static	uchar *spto;
-void
-taskcm_handlependsv(void)
-{
-	if (spfr == nil) {
-		/* This is the first context switch, called from the main stack (MSP);
-		 * in that case we do not need to save the context
-		 * since we never return to MSP.
-		 */
-		goto restore;
-	}
-
-	/* Save registers to the PSP stack;
-	 * additional registers are pushed in hardware
-	 */
-	__asm__(
-		"MRS %0, psp\n"	/* move psp to register */
-
-#if defined (__VFP_FP__) && !defined(__SOFTFP__)
-		/* Currently, the `lr` register contains the EXC_RETURN value,
-		 * that was set by the controller when the PendSV handler got called.
-		 * If EXC_RETURN.FType (bit 4) is zero, this means
-		 * the FPU was in use at the time the current task was interrupted, and
-		 * its state has to be saved when switching context.
-		 * As explained in Cortex-M4(F) Lazy Stacking and Context Switching,
-		 * p. 17, s16-s31 must be saved to the stack manually,
-		 * using the VSTM instruction.
-		 * The use of this instruction will trigger saving of s0-s15 registers,
-		 * which is done by the controller automatically.
-		 */
-		"TST lr, #(1<<4)	\n"
-		"	IT eq	\n"
-		"	VSTMdbeq %0!, {s16-s31}	\n"
-#endif
-
-		/* save r4-r11, and the EXC_RETURN value (from `lr`) */
-		"STMdb %0!, {r4-r11, lr}	\n"
-
-		"MSR psp, %0	\n"	/* move register to psp */
-		: "=r" (*spfr)
-	);
-
-restore:
-	/* Load registers with contents of the PSP stack;
-	 * additional registers are popped in hardware
-	 */
-	__asm__(
-		/* Restore r4-r11, and the EXC_RETURN value (in `lr`) */
-		"LDMia %0!, {r4-r11, lr}	\n"
-
-#if defined (__VFP_FP__) && !defined(__SOFTFP__)
-		/* The LDM instruction above also restored `lr`,
-		 * which now again contains the EXC_RETURN value
-		 * from the moment the task's context got saved last time.
-		 * If EXC_RETURN.FType is 0, FP context was in use;
-		 * in this case, registers s16-s31 must be restored manually
-		 * (registers s0-s15 will automatically be restored by the controller).
-		 */
-		"TST lr, #(1<<4)	\n"
-		"	IT eq	\n"
-		"	VLDMiaeq %0!, {s16-s31}	\n"
-#endif
-
-		"MSR psp, %0\n"
-		:
-		: "r" (spto)
-	);
-}
+uchar **taskcm_spfr;	/* nil on first switch from MSP to PSP */
+uchar *taskcm_spto;
 
 void
 taskcm_contextswitch(Task *from, Task *to)
 {
 	if (from != nil) {
-		spfr = &from->sp;
+		taskcm_spfr = &from->sp;
 	}
-	spto = to->sp;
+	taskcm_spto = to->sp;
 	taskrunning = to;
 
 	/* manually trigger pend_sv */
