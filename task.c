@@ -244,12 +244,12 @@ addsleeptask(Task *t, int32 us)
 	int32 now;
 
 	now = taskconf->usec();
-	t->delay = us;
 
 	if (sq == nil) {
 		/* set new base time */
 		sqbasetime = now;
 	}
+	t->delay = us + (now - sqbasetime);
 
 	/* add to sleep queue */
 	qprev = nil;
