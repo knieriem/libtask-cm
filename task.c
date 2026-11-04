@@ -147,12 +147,12 @@ taskswitch(void)
 		if (sq != nil) {
 			now = taskconf->usec() - taskconf->usec_uncertainty;
 
-			/* add a task that is done sleeping to the front of the runqueue */
+			/* add a task that is done sleeping to the runqueue */
 			if (now-sqbasetime >= sq->delay) {
 				t = sq;
 				sqbasetime += t->delay;
 				sq = t->next;
-				addtasktofront(&taskrunqueue, t);
+				addtask(&taskrunqueue, t);
 			}
 		}
 
@@ -201,20 +201,6 @@ addtask(Tasklist *l, Task *t)
 	}
 	l->tail = t;
 	t->next = nil;
-}
-
-void
-addtasktofront(Tasklist *l, Task *t)
-{
-	if (l->head) {
-		l->head->prev = t;
-		t->next = l->head;
-	} else {
-		l->tail = t;
-		t->next = nil;
-	}
-	l->head = t;
-	t->prev = nil;
 }
 
 void
