@@ -14,12 +14,12 @@ extern "C" {
 typedef const struct Taskconf Taskconf;
 
 struct Taskconf {
-	int32 (*usec)(void);
-	int32 usec_uncertainty;
-	void	(*pauseusecs)(int32);
+	int32_t (*usec)(void);
+	int32_t usec_uncertainty;
+	void	(*pauseusecs)(int32_t);
 
 	/* Memfill: fill memory with a pattern */
-	void (*memfill)(uint32 *p, int size);
+	void (*memfill)(uint32_t *p, int size);
 };
 extern	Taskconf	*taskconf;
 
@@ -32,14 +32,14 @@ typedef struct Task Task;
 typedef struct Tasklist Tasklist;
 
 int		anyready(void);
-int		taskcreate(void (*f)(void *arg), void *arg, void *stk, uint stacksize);
+int		taskcreate(void (*f)(void *arg), void *arg, void *stk, unsigned int stacksize);
 void		taskexit(int);
 int		taskyield(void);
 void		taskswitch(void);
 void		needstack(int);
 void		taskname(char*, ...);
 void		taskstate(char*, ...);
-void	taskdelay(int32);
+void	taskdelay(int32_t);
 unsigned int	taskid(void);
 
 struct Tasklist	/* used internally */

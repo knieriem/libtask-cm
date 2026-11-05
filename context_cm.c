@@ -21,7 +21,7 @@ struct Stackframe {
 		uint32_t r9;
 		uint32_t r10;
 		uint32_t r11;
-		uint32 excret;	/* pend sv handler's lr */
+		uint32_t excret;	/* pend sv handler's lr */
 	} sw_frame;
 
 	/* these registers are pushed by the hardware */
@@ -31,8 +31,8 @@ struct Stackframe {
 		uint32_t r2;
 		uint32_t r3;
 		uint32_t r12;
-		void *lr;
-		void *pc;
+		uint32_t lr;
+		uint32_t pc;
 		uint32_t psr;
 	} hw_frame;
 };
@@ -59,9 +59,9 @@ taskcm_setuptask(Task *t, void (*handler)(void*), void* arg)
 
 	f = (Stackframe*) t->sp;
 	f->sw_frame.excret = 0xFFFFFFFD;
-	f->hw_frame.r0 = (uintptr)arg;
-	f->hw_frame.lr = exittask;
-	f->hw_frame.pc = handler;
+	f->hw_frame.r0 = (uintptr_t)arg;
+	f->hw_frame.lr = (uint32_t)(uintptr_t)exittask;
+	f->hw_frame.pc = (uint32_t)(uintptr_t)handler;
 	f->hw_frame.psr = 0x21000000;	/* default PSR value */
 }
 

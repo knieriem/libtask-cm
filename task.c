@@ -24,12 +24,12 @@ static int taskidgen;
 static void*
 alignptr(void *p, int *sz, int *na0)
 {
-	uintptr p0, pa;
+	uintptr_t p0, pa;
 	int n;
 
 	/* align p */
-	p0 = (uintptr)p;
-	pa = (p0 + 7) & ~(uintptr)7;
+	p0 = (uintptr_t)p;
+	pa = (p0 + 7) & ~(uintptr_t)7;
 	n = pa-p0;
 	if (n > *sz) {
 		*sz = 0;
@@ -133,13 +133,13 @@ taskexit(int val)
 
 
 static Task *sq;
-static int32 sqbasetime;
+static int32_t sqbasetime;
 
 void
 taskswitch(void)
 {
-	int32 now;
-	int32 left;
+	int32_t now;
+	int32_t left;
 	Task *t;
 
 //	taskdebug("scheduler enter");
@@ -224,10 +224,10 @@ taskid(void)
 
 
 static void
-addsleeptask(Task *t, int32 us)
+addsleeptask(Task *t, int32_t us)
 {
 	Task *q, *qprev;
-	int32 now;
+	int32_t now;
 
 	now = taskconf->usec();
 
@@ -261,7 +261,7 @@ addsleeptask(Task *t, int32 us)
 }
 
 void
-taskdelay(int32 us)
+taskdelay(int32_t us)
 {
 	addsleeptask(taskrunning, us);
 	taskswitch();

@@ -1,3 +1,5 @@
+typedef unsigned int uint;
+
 struct Task
 {
 	Task	*next;
@@ -11,7 +13,7 @@ struct Task
 	int	exiting;
 	int	ready;
 	void	*udata;
-	int32	delay;
+	int32_t	delay;
 };
 
 void	taskready(Task*);

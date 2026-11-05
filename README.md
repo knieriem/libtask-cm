@@ -63,7 +63,7 @@ int taskyield(void);
 >	current task was waiting. Zero means there are no other tasks
 >	trying to run; in this case, CPU is not given up (no context switch).
 
-void taskdelay(int32 us)
+void taskdelay(int32_t us)
 
 >	Explicitly give up the CPU for at least us microseconds.
 >	Other tasks continue to run during this time.
